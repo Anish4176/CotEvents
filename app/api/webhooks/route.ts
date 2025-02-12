@@ -1,8 +1,6 @@
 import { Webhook } from "svix";
 import { headers } from "next/headers";
 import {  WebhookEvent } from "@clerk/nextjs/server";
-import { connectToDatabase } from "@/database/dbConnect";
-import UserModel from "@/database/models/userModel";
 import { NextResponse } from "next/server";
 import { createUser, deleteUser, updateUser } from "@/actions/user.action";
 

@@ -5,7 +5,7 @@ export const NavbarMenu=[
     },
     {
         title:"Create Event",
-        link: "/create-event",
+        link: "/events/create",
     },
     {
         title:"My Profile",

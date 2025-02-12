@@ -5,7 +5,7 @@ import React from 'react'
 
 const Home = () => {
   return (
-    <main className='max-w-7xl flex flex-col justify-center items-center'>
+    <main className='max-w-7xl flex flex-col justify-center items-center w-[100%]'>
       <Hero/>
       <Events/>
     </main>
