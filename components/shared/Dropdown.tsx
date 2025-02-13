@@ -35,7 +35,7 @@ const Dropdown = ({ onChangeHandler, value }: DropDownProps) => {
 
   const handleAddCategory = async()=>{
     if(!newCategory){
-      console.log("category name cannot be empty");
+      console.log("category name cannot be Empty");
       return;
     }
     const response:Icategory=await addNewCategory(newCategory.trim());
