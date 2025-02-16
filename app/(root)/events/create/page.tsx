@@ -2,10 +2,9 @@ import EventForm from "@/components/shared/EventForm";
 import React from "react";
 import { auth } from "@clerk/nextjs/server";
 const CreateEvent = async() => {
-  const {userId}= await auth();
-  if(!userId){
-    return <div>Please Signin to create a event</div>
-  }
+  const { sessionClaims,redirectToSignIn } = await auth();
+  const userId= sessionClaims?.userId as string;
+  
   return (
     <section className="w-full">
       <div>

@@ -22,6 +22,8 @@ import { Input } from "@/components/ui/input";
 import Dropdown from "./Dropdown";
 import FileUploader from "./FileUploader";
 import Image from "next/image";
+import { createEvent } from "@/actions/event.action";
+import { useRouter } from "next/navigation";
 
 type EventFormProps = {
   userId: string;
@@ -44,8 +46,7 @@ const formSchema = z.object({
   location: z
     .string()
     .trim()
-    .max(400, { message: "Must be 400 or fewer characters long" })
-    .optional(),
+    .max(400, { message: "Must be 400 or fewer characters long" }),
   imageUrl: z.string().url({ message: "Must be a valid URL" }),
   startDateTime: z.date(),
   endDateTime: z.date(),
@@ -55,10 +56,8 @@ const formSchema = z.object({
 });
 
 const EventForm = ({ userId, type }: EventFormProps) => {
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setendDate] = useState(new Date());
-  const [imgUrl, setimgUrl] = useState<string>("");
-
+   const router= useRouter();
+   console.log(userId)
   // 1. Default values of the form fields
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -77,10 +76,26 @@ const EventForm = ({ userId, type }: EventFormProps) => {
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try{
+      if(type=='Create'){
+        const response = await createEvent({
+          event:values,
+          userId:userId,
+          path:'/profile'
+        });
+        if(response){
+          form.reset();
+          router.push(`/events/${response._id}`)
+        }
+      }
+      
+    }catch(e:any){
+      console.log(e);
+      console.log(e.message);
+    }
+
+    
   }
   return (
     <Form {...form}>
@@ -147,8 +162,9 @@ const EventForm = ({ userId, type }: EventFormProps) => {
               <FormItem className="w-[100%]">
                 <FormControl>
                   <FileUploader 
-                   imgUrl={imgUrl}
-                   setimgUrl={setimgUrl}
+                   imgUrl={field.value}
+                   onChangeHandler={(URL)=>field.onChange(URL)}
+                   {...field}
                   />
                 </FormControl>
                 <FormMessage />
@@ -204,8 +220,8 @@ const EventForm = ({ userId, type }: EventFormProps) => {
                         />
                         <p className="whitespace-nowrap">Start Date:</p>
                         <DatePicker 
-                        selected={startDate} 
-                        onChange={(date) => setStartDate(date!)}
+                        selected={field.value} 
+                        onChange={(date:Date | null) => field.onChange(date)}
                         showTimeSelect 
                         dateFormat="Pp"
                         className="border-none bg-gray-50 focus:outline-none focus:border-none "
@@ -232,8 +248,8 @@ const EventForm = ({ userId, type }: EventFormProps) => {
                         />
                         <p className="whitespace-nowrap">End Date:</p>
                         <DatePicker 
-                        selected={endDate} 
-                        onChange={(date) => setStartDate(date!)}
+                        selected={field.value} 
+                        onChange={(date:Date | null) => field.onChange(date)}
                         showTimeSelect 
                         dateFormat="Pp"
                         className="border-none bg-gray-50 focus:outline-none focus:border-none "
@@ -275,8 +291,7 @@ const EventForm = ({ userId, type }: EventFormProps) => {
                           <FormControl>
                             <div className="flex items-center justify-start bg-gray-50 rounded-full pl-2 gap-2">
                             <label htmlFor="isFree">isFree</label>
-                            <Checkbox id="isFree" />
-
+                            <Checkbox id="isFree" checked={field.value} onCheckedChange={field.onChange} />
                             </div>
                           </FormControl>
                           <FormMessage />

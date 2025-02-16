@@ -7,10 +7,10 @@ import { useState } from "react";
 
 type imageProps={
   imgUrl:string;
-  setimgUrl:React.Dispatch<React.SetStateAction<string>>;
+  onChangeHandler:(URL:string)=>void;
 }
 //i have to come back to this component
-export default function FileUploader({imgUrl,setimgUrl}:imageProps) {
+export default function FileUploader({imgUrl,onChangeHandler}:imageProps) {
   
 
   return (
@@ -31,7 +31,7 @@ export default function FileUploader({imgUrl,setimgUrl}:imageProps) {
           endpoint="imageUploader"        
           content={{ label: "Choose an image" }} // Custom text
           onClientUploadComplete={(res) => {
-            setimgUrl(res[0].url);
+            onChangeHandler(res[0].url);
           }}
           onUploadError={(error: Error) => {
             console.log(`ERROR! ${error.message}`);
