@@ -78,9 +78,12 @@ body {
 }
 @layer utilities {
   .heading{
-    @apply text-2xl font-bold md:text-4xl lg:text-6xl;
+    @apply text-[24px] lg:text-[33px] lg:leading-[2.4rem] tracking-wide font-bold text-start;
   }
   .input{
     @apply bg-gray-50 border-none focus-visible:ring-offset-0  focus-visible:ring-transparent rounded-full h-[50px] py-2 px-4 text-base;
+  }
+  .wrapper{
+    @apply max-w-7xl mx-auto px-5;
   }
 }

@@ -22,10 +22,13 @@ import { Input } from "@/components/ui/input";
 import Dropdown from "./Dropdown";
 import FileUploader from "./FileUploader";
 import Image from "next/image";
-import { createEvent } from "@/actions/event.action";
+import { createEvent, updateEvent } from "@/actions/event.action";
 import { useRouter } from "next/navigation";
+import { IEvent } from "@/database/models/eventModel";
 
 type EventFormProps = {
+  event?:IEvent;
+  eventId:string;
   userId: string;
   type: string;
 };
@@ -55,13 +58,18 @@ const formSchema = z.object({
   url: z.string().url({ message: "Must be a valid URL" }),
 });
 
-const EventForm = ({ userId, type }: EventFormProps) => {
+const EventForm = ({event,eventId, userId, type }: EventFormProps) => {
    const router= useRouter();
-   console.log(userId)
   // 1. Default values of the form fields
+  console.log('hey',event)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
+    defaultValues: event? {
+      ...event,
+      startDateTime:new Date(event.startDateTime),
+      endDateTime: new Date(event.endDateTime),
+      categoryId:event.category._id
+    }: {
       title: "",
       categoryId: "",
       description: "",
@@ -78,6 +86,7 @@ const EventForm = ({ userId, type }: EventFormProps) => {
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try{
+      console.log('try',values)
       if(type=='Create'){
         const response = await createEvent({
           event:values,
@@ -87,6 +96,17 @@ const EventForm = ({ userId, type }: EventFormProps) => {
         if(response){
           form.reset();
           router.push(`/events/${response._id}`)
+        }
+      }
+      if(type=='Update'){
+        const newEvent = await updateEvent({
+          userId:userId,
+          event:{...values,_id:eventId},
+          path: `/events/${eventId}`
+        });
+        if(newEvent){
+          form.reset();
+          router.push(`/events/${newEvent._id}`)
         }
       }
       
@@ -101,7 +121,7 @@ const EventForm = ({ userId, type }: EventFormProps) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col items-center justify-center gap-5 md:py-10 md:px-10 px-2 py-5"
+        className="flex flex-col items-center justify-center gap-5 md:gap-7 md:py-10 md:px-10 px-2 py-5"
       >
         {/* Title and category input */}
         <div className="flex flex-col md:flex-row w-full justify-between items-center gap-5">
@@ -332,7 +352,7 @@ const EventForm = ({ userId, type }: EventFormProps) => {
             />
           
         </div>
-        <Button type="submit">Submit</Button>
+        <Button type="submit" className="w-full rounded-full py-5">Submit</Button>
       </form>
     </Form>
   );

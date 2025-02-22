@@ -11,8 +11,8 @@ import { MobileMenu } from "./MobileMenu";
 const Header = () => {
   const pathname = usePathname(); 
   return (
-    <nav className="w-[100%] py-4  border-b">
-      <div className="flex  justify-between items-center w-full h-10 md:h-12">
+    <nav className="w-full py-4 border-b">
+      <div className="flex wrapper max-md:px-5  justify-between items-center h-10 md:h-12">
         {/* logo */}
         <Link href="/">
           <div>

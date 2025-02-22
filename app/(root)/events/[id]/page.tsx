@@ -1,10 +1,12 @@
-import { getEventById } from "@/actions/event.action";
+import { getEventById, getRelatedEvents } from "@/actions/event.action";
+import EventCollection from "@/components/shared/EventCollection";
 import { formatDateTime } from "@/lib/utils";
 import Image from "next/image";
 import React from "react";
 
 const page = async ({ params }: any) => {
   const EventDetails = await getEventById(params.id);
+  
   const {
     title,
     description,
@@ -18,6 +20,9 @@ const page = async ({ params }: any) => {
     category,
     organizer,
   } = EventDetails;
+
+  const relatedEvents=await getRelatedEvents(category._id);
+  console.log('o',relatedEvents)
   return (
     <section>
       <div className="grid grid-cols-1 md:grid-cols-2">
@@ -73,6 +78,13 @@ const page = async ({ params }: any) => {
           {url}
           </div>
         </div>
+      </div>
+      <div>
+        <EventCollection
+         data={[]}
+         type="Related_Events"
+         emptyTitle="No Related Events Found!"
+        />
       </div>
     </section>
   );

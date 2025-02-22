@@ -1,21 +1,35 @@
-import React from 'react'
+import React from "react";
+import EventCollection from "./EventCollection";
+import { getAllEvents } from "@/actions/event.action";
 
-const Events = () => {
+const Events = async() => {
+  const allEvents=await getAllEvents({
+    limit:6,
+    category:"",
+    query:"",
+    page:1
+  });
+  console.log("results",allEvents);
   return (
-    <section  id="events">
-     <div className='flex flex-col justify-center items-center text-center gap-5'>
-     <h1 className="text-3xl  lg:text-5xl font-semibold ">Trusted by <br /> Thousands of events</h1>
-        <div className='flex flex-col md:flex-row justify-center items-center w-full'>
-            <p>Events</p>
-            <p>filter</p>
+    <section id="events" className="w-[100%]">
+      <div className="wrapper flex flex-col justify-center items-start gap-5">
+        <h1 className="text-[24px] lg:text-[33px] lg:leading-[2.4rem] tracking-wide font-bold text-start">
+          Trusted by <br /> Thousands of events
+        </h1>
+        <div className="flex flex-col md:flex-row justify-between items-center w-full">
+          <p>Events</p>
+          <p>filter</p>
         </div>
         <div>
-         
+          <EventCollection
+           data={allEvents?.data}
+           type="All_Events"
+           emptyTitle="No Events Found"
+          />
         </div>
-     </div>
-
+      </div>
     </section>
-  )
-}
+  );
+};
 
-export default Events
+export default Events;
