@@ -14,7 +14,7 @@ const CreateEvent = async({params}:any) => {
         <h1 className="heading mx-auto">Update Event</h1>
       </div>
       <div className="wrapper">
-        <EventForm event={eventDetails} eventId={eventId} userId={userId} type="Update"/>
+        <EventForm eventDetails={eventDetails} userId={userId} type="Update"/>
       </div>
     </section>
   );

@@ -4,7 +4,7 @@ import Image from "next/image";
 
 const Home = () => {
   return (
-    <main className="flex flex-col space-y-10 md:space-y-14 justify-center items-center w-full">
+    <main className="flex flex-col space-y-7 md:space-y-10  justify-center items-center w-full">
       <section className="bg-gray-50 w-[100%] py-10 md:py-20">
         <div className="wrapper flex flex-col md:flex-row justify-between items-center space-y-7 ">
           <div className="md:w-[45%] space-y-4 md:space-y-8 max-md:text-center">
@@ -12,7 +12,7 @@ const Home = () => {
               Discover Our Campus Events, All in One Place!
             </h1>
             <p className="text-base md:text-xl font-medium ">
-            Browse, create, and get tickets for every event happening in campus—everything you need is here."
+            Browse, create, and get tickets for every event happening in campus—everything you need is here.
             </p>
             <Button size="lg" className="rounded-full ">Explore Events</Button>
           </div>

@@ -27,8 +27,7 @@ import { useRouter } from "next/navigation";
 import { IEvent } from "@/database/models/eventModel";
 
 type EventFormProps = {
-  event?:IEvent;
-  eventId:string;
+  eventDetails?:IEvent;
   userId: string;
   type: string;
 };
@@ -58,17 +57,17 @@ const formSchema = z.object({
   url: z.string().url({ message: "Must be a valid URL" }),
 });
 
-const EventForm = ({event,eventId, userId, type }: EventFormProps) => {
+const EventForm = ({eventDetails, userId, type }: EventFormProps) => {
    const router= useRouter();
   // 1. Default values of the form fields
-  console.log('hey',event)
+  const eventId=eventDetails?._id;
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: event? {
-      ...event,
-      startDateTime:new Date(event.startDateTime),
-      endDateTime: new Date(event.endDateTime),
-      categoryId:event.category._id
+    defaultValues: eventDetails? {
+      ...eventDetails,
+      startDateTime:new Date(eventDetails.startDateTime),
+      endDateTime: new Date(eventDetails.endDateTime),
+      categoryId:eventDetails.category._id
     }: {
       title: "",
       categoryId: "",
@@ -99,9 +98,13 @@ const EventForm = ({event,eventId, userId, type }: EventFormProps) => {
         }
       }
       if(type=='Update'){
+        if(!eventId){
+          router.back();
+          return;
+        }
         const newEvent = await updateEvent({
           userId:userId,
-          event:{...values,_id:eventId},
+          event:{...values, _id:eventId},
           path: `/events/${eventId}`
         });
         if(newEvent){

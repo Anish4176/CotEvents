@@ -9,9 +9,9 @@ const Events = async() => {
     query:"",
     page:1
   });
-  console.log("results",allEvents);
+
   return (
-    <section id="events" className="w-[100%]">
+    <section id="events" className="w-[100%] py-5 md:py-10">
       <div className="wrapper flex flex-col justify-center items-start gap-5">
         <h1 className="text-[24px] lg:text-[33px] lg:leading-[2.4rem] tracking-wide font-bold text-start">
           Trusted by <br /> Thousands of events

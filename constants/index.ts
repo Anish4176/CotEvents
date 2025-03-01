@@ -9,7 +9,7 @@ export const NavbarMenu=[
     },
     {
         title:"My Profile",
-        link: "/my-profile",
+        link: "/profile",
     },
     
 ]

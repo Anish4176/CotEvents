@@ -3,7 +3,7 @@ import React from "react";
 import Card from "./Card";
 type EventCollectionParams = {
   data: IEvent[];
-  type: "All_Events" | "Related_Events";
+  type: "All_Events" | "Related_Events" |"Organized_Events";
   emptyTitle: string;
 };
 const EventCollection = ({ data, type, emptyTitle }: EventCollectionParams) => {

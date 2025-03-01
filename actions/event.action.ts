@@ -9,6 +9,7 @@ import {
   CreateEventParams,
   DeleteEventParams,
   GetAllEventsParams,
+  GetEventsByUserParams,
   UpdateEventParams,
 } from "@/types";
 import { revalidatePath } from "next/cache";
@@ -127,13 +128,39 @@ export const updateEvent = async ({userId, event, path }: UpdateEventParams) => 
   }
 };
 
-export const getRelatedEvents = async (categoryId:{categoryId:string}) => {
+export const getRelatedEvents = async (categoryId:string,eventId:string) => {
   try {
     await connectToDatabase();
-    const relatedEvents = await EventModel.find({category:categoryId});
+    const relatedEvents = await EventModel.find({category:categoryId ,_id:{$ne:eventId}}).populate({path:'category'}).populate({path:'organizer',select:"firstName lastName"});
     return JSON.parse(JSON.stringify(relatedEvents));
   } catch (e) {
     handleError(e);
   }
 };
 
+export const fetchEventsOfOrganizer = async ({
+  userId,
+  limit=4,
+  page
+}: GetEventsByUserParams) => {
+  try {
+    await connectToDatabase();
+    const conditions={organizer:userId};
+    const skipEventDocument = (Number(page) - 1) * limit;
+    const EventsQuery = await EventModel.find(conditions)
+      .sort({ createdAt: "desc" })
+      .skip(skipEventDocument)
+      .limit(limit)
+      .populate({ path: "organizer", select: "_id firstName lastName" })
+      .populate({ path: "category", select: "_id categoryName" })
+      .lean();
+
+    const TotalEventDocuments = await EventModel.countDocuments(conditions);
+    return {
+      data: JSON.parse(JSON.stringify(EventsQuery)),
+      totalPages: Math.ceil(TotalEventDocuments / limit),
+    };
+  } catch (e) {
+    handleError(e);
+  }
+};
