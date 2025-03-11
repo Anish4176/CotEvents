@@ -1,8 +1,13 @@
 import React from "react";
 import EventCollection from "./EventCollection";
 import { getAllEvents } from "@/actions/event.action";
+import Search from "./Search";
 
-const Events = async() => {
+const Events = async({searchParams}:any) => {
+  // const query=await searchParams?.query as string || "";
+  // console.log('hey',query);
+  const query= searchParams?.query;
+  console.log('are',query)
   const allEvents=await getAllEvents({
     limit:6,
     category:"",
@@ -17,14 +22,15 @@ const Events = async() => {
           Trusted by <br /> Thousands of events
         </h1>
         <div className="flex flex-col md:flex-row justify-between items-center w-full">
-          <p>Events</p>
+          <Search />
           <p>filter</p>
         </div>
-        <div>
+        <div className="wrapper w-full flex flex-col justify-center items-start gap-5 my-10">
           <EventCollection
            data={allEvents?.data}
            type="All_Events"
            emptyTitle="No Events Found"
+           emptySubTitle="Come back later"
           />
         </div>
       </div>

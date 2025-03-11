@@ -7,6 +7,7 @@ import Razorpay from "razorpay";
 import Script from "next/script";
 import { SignedIn, SignedOut, useUser } from "@clerk/nextjs";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 const Checkout = ({ event }: { event: IEvent }) => {
   const { user } = useUser();
@@ -41,20 +42,12 @@ const Checkout = ({ event }: { event: IEvent }) => {
           const razorpay_payment_id = response.razorpay_payment_id;
           const razorpay_signature = response.razorpay_signature;
           const orderId = createOrder.id;
-          const verifySignature = await verifyRazorpaySignature({
+          await verifyRazorpaySignature({
             orderId,
             razorpay_payment_id,
             razorpay_signature,
           });
-          if(!verifySignature.success){
-             throw new Error (verifySignature.message)
-          }
-          else{
-            console.log("everything is perfect")
-          }
-          // alert(response.razorpay_payment_id);
-          // alert(response.razorpay_order_id);
-          // alert(response.razorpay_signature)
+          
         } catch (e) {
           console.log(e);
         }

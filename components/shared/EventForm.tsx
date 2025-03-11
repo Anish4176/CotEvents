@@ -137,7 +137,7 @@ const EventForm = ({eventDetails, userId, type }: EventFormProps) => {
                   <Input
                     placeholder="Event title"
                     {...field}
-                    className="input"
+                    className="rounded-full h-[54px] focus-visible:ring-offset-0 border-none focus-visible:ring-transparent outline-none shadow-none bg-gray-50"
                   />
                 </FormControl>
                 <FormMessage />
@@ -148,7 +148,7 @@ const EventForm = ({eventDetails, userId, type }: EventFormProps) => {
             control={form.control}
             name="categoryId"
             render={({ field }) => (
-              <FormItem className="w-full">
+              <FormItem className="w-full rounded-full h-[54px] focus-visible:ring-offset-0 border-none focus-visible:ring-transparent outline-none shadow-none">
                 <FormControl>
                   <Dropdown
                     onChangeHandler={field.onChange}
@@ -171,7 +171,7 @@ const EventForm = ({eventDetails, userId, type }: EventFormProps) => {
                   <Textarea
                     placeholder="Event Desctiption"
                     {...field}
-                    className="bg-gray-50 border-0 rounded-2xl py-4 px-4 focus:ring-0 focus:ring-offset-0"
+                    className="bg-gray-50 focus-visible:ring-offset-0 border-none focus-visible:ring-transparent outline-none shadow-none"
                   />
                 </FormControl>
                 <FormMessage />

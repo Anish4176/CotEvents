@@ -113,11 +113,11 @@ export type CreateUserParams = {
   }
   
   export type CreateOrderParams = {
-    stripeId: string
+    RazorpaymentId: string
     eventId: string
-    buyerId: string
-    totalAmount: string
-    createdAt: Date
+    BuyerId: string
+    totalAmount: Number
+    createdAt?: Date
   }
   
   export type GetOrdersByEventParams = {
@@ -146,4 +146,19 @@ export type CreateUserParams = {
   export type SearchParamProps = {
     params: { id: string }
     searchParams: { [key: string]: string | string[] | undefined }
+  }
+
+  export type IOrderItem={
+    _id:string
+    RazorpaymentId:string
+    eventId:{
+      title:string
+    }
+    BuyerId:{
+      _id:string
+      email:string
+      firstName:string
+    }
+    totalAmount:string
+    createdAt?:Date
   }

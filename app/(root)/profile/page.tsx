@@ -1,6 +1,8 @@
 import { fetchEventsOfOrganizer } from "@/actions/event.action";
+import { fetchBoughtEvents } from "@/actions/order.action";
 import EventCollection from "@/components/shared/EventCollection";
 import { Button } from "@/components/ui/button";
+import { IEvent } from "@/database/models/eventModel";
 import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
 import React from "react";
@@ -14,7 +16,17 @@ const page = async () => {
     limit: 4,
     page: 1,
   });
-  console.log("ohello", OrganizedEvents);
+  // console.log(OrganizedEvents?.data)
+  const EventsTickets = await fetchBoughtEvents({
+    userId,
+    limit: 4,
+    page: 1,
+  });
+  console.log(EventsTickets?.data);
+  const EventData= EventsTickets?.data.map((item:any)=>(
+       item.eventId
+  ))
+  console.log(EventData)
   return (
     <>
       <section className="w-full">
@@ -29,7 +41,14 @@ const page = async () => {
             </Button>
           </div>
         </div>
-        <div className="wrapper">{/* show all tickets  */}</div>
+        <div className="wrapper flex flex-col justify-center items-start gap-5 my-10">
+          <EventCollection
+            data={EventData}
+            type="Ticket_Events"
+            emptyTitle="No event tickets purchased yet"
+            emptySubTitle="No worries - plenty of exciting events to explore!"
+          />
+        </div>
       </section>
       <section className="w-full">
         <div className="h-24 md:h-44 bg-gray-50 flex items-center justify-center ">
@@ -49,7 +68,8 @@ const page = async () => {
           <EventCollection
             data={OrganizedEvents?.data}
             type="Organized_Events"
-            emptyTitle="No Organized Events Found!"
+            emptyTitle="No events have been created yet"
+            emptySubTitle="Go create some now"
           />
         </div>
       </section>

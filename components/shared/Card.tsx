@@ -9,13 +9,15 @@ import { boolean } from "zod";
 import DeleteConfirmation from "./DeleteConfirmation";
 type CardProps = {
   item: IEvent;
+  type: "All_Events" | "Related_Events" | "Organized_Events" | "Ticket_Events";
+  hasOrderLink: boolean
 };
-const Card = async ({ item }: CardProps) => {
+const Card = async ({ item, type,hasOrderLink }: CardProps) => {
   const { sessionClaims } = await auth();
   const userId = sessionClaims?.userId as string;
   const isEventOrganizer = userId === (item.organizer._id as string);
   return (
-    <div className="flex relative flex-col gap-5 rounded-lg shadow-md">
+    <div className="flex relative flex-col gap-5 rounded-lg shadow-md pb-3">
       <div>
         <Image
           src={item.imageUrl}
@@ -36,13 +38,13 @@ const Card = async ({ item }: CardProps) => {
             />
           </Link>
 
-          <DeleteConfirmation id={item?._id}/>
+          <DeleteConfirmation id={item?._id} />
         </div>
       )}
 
       <Link
         href={`/events/${item._id}`}
-        className="px-5 py-2 flex flex-col gap-3 pb-5"
+        className="px-5 pt-2 flex flex-col gap-3 "
       >
         <div className="flex justify-start items-center gap-2">
           {item.price ? (
@@ -65,6 +67,17 @@ const Card = async ({ item }: CardProps) => {
           {item.organizer.firstName} {item.organizer.lastName}
         </div>
       </Link>
+      {hasOrderLink && <div >
+        <Link className="flex justify-end items-center p-3 gap-2" href={`/order/${item?._id}`}>
+        <h1 className="text-purple-700">Order Details</h1>
+          <Image
+          src='/assets/icons/arrow.svg'
+          alt='arrow'
+          width={10}
+          height={10}
+          />
+        </Link>
+      </div>}
     </div>
   );
 };
