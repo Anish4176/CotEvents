@@ -74,6 +74,14 @@ export const getEventById = async (eventId: string) => {
     handleError(e);
   }
 };
+export const getCategoryByName = async (categoryName:string) => {
+  try {
+    const getcategory = await Category.findOne({ categoryName: { $regex: categoryName, $options: 'i' } });
+    return JSON.parse(JSON.stringify(getcategory));
+  } catch (e) {
+    handleError(e);
+  }
+};
 export const getAllEvents = async ({
   limit,
   category,
@@ -82,7 +90,10 @@ export const getAllEvents = async ({
 }: GetAllEventsParams) => {
   try {
     await connectToDatabase();
-    const conditions = {};
+    const queryCondition =query?  {title:{ $regex: query, $options: 'i' } }:{};
+    const categoryCondition= category? await getCategoryByName(category):null;
+
+    const conditions={$and:[queryCondition , categoryCondition?{ category: categoryCondition._id } : {}]}
     const skipEventDocument = (Number(page) - 1) * limit;
     const EventsQuery = await EventModel.find(conditions)
       .sort({ createdAt: "desc" })

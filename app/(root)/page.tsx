@@ -1,8 +1,19 @@
-import Events from "@/components/shared/Events";
+import { getAllEvents } from "@/actions/event.action";
+import Category from "@/components/shared/Category";
+import EventCollection from "@/components/shared/EventCollection";
+import Search from "@/components/shared/Search";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
-const Home = () => {
+const Home = async({searchParams}:any) => {
+  const query= searchParams?.query as string || "";
+  const category=searchParams?.category as string || "";
+  const allEvents=await getAllEvents({
+    limit:6,
+    category,
+    query,
+    page:1
+  });
   return (
     <main className="flex flex-col space-y-7 md:space-y-10  justify-center items-center w-full">
       <section className="bg-gray-50 w-[100%] py-10 md:py-20">
@@ -26,7 +37,25 @@ const Home = () => {
           </div>
         </div>
       </section>
-      <Events />
+      <section id="events" className="w-[100%] py-5 md:py-10">
+      <div className="wrapper flex flex-col justify-center items-start gap-5">
+        <h1 className="text-[24px] lg:text-[33px] lg:leading-[2.4rem] tracking-wide font-bold text-start">
+          Trusted by <br /> Thousands of events
+        </h1>
+        <div className="flex flex-col md:flex-row justify-between items-center w-full">
+          <Search />
+          <Category/>
+        </div>
+        <div className="wrapper w-full flex flex-col justify-center items-start gap-5 my-10">
+          <EventCollection
+           data={allEvents?.data}
+           type="All_Events"
+           emptyTitle="No Events Found"
+           emptySubTitle="Come back later"
+          />
+        </div>
+      </div>
+    </section>
     </main>
   );
 };
