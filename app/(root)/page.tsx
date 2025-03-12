@@ -1,6 +1,7 @@
 import { getAllEvents } from "@/actions/event.action";
 import Category from "@/components/shared/Category";
 import EventCollection from "@/components/shared/EventCollection";
+import Pagination from "@/components/shared/Pagination";
 import Search from "@/components/shared/Search";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
@@ -8,11 +9,12 @@ import Image from "next/image";
 const Home = async({searchParams}:any) => {
   const query= searchParams?.query as string || "";
   const category=searchParams?.category as string || "";
+  const page=searchParams?.page as string || "1";
   const allEvents=await getAllEvents({
     limit:6,
     category,
     query,
-    page:1
+    page
   });
   return (
     <main className="flex flex-col space-y-7 md:space-y-10  justify-center items-center w-full">
@@ -42,8 +44,8 @@ const Home = async({searchParams}:any) => {
         <h1 className="text-[24px] lg:text-[33px] lg:leading-[2.4rem] tracking-wide font-bold text-start">
           Trusted by <br /> Thousands of events
         </h1>
-        <div className="flex flex-col md:flex-row justify-between items-center w-full">
-          <Search />
+        <div className="flex flex-col md:flex-row justify-between items-center w-full gap-5">
+          <Search placeholder="Search for a title..." />
           <Category/>
         </div>
         <div className="wrapper w-full flex flex-col justify-center items-start gap-5 my-10">
@@ -52,6 +54,8 @@ const Home = async({searchParams}:any) => {
            type="All_Events"
            emptyTitle="No Events Found"
            emptySubTitle="Come back later"
+           page={page}
+           totalPages={allEvents?.totalPages}
           />
         </div>
       </div>

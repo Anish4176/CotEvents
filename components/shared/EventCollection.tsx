@@ -1,13 +1,17 @@
 import { IEvent } from "@/database/models/eventModel";
 import React from "react";
 import Card from "./Card";
+import Pagination from "./Pagination";
 type EventCollectionParams = {
   data: IEvent[];
   type: "All_Events" | "Related_Events" | "Organized_Events" | "Ticket_Events";
   emptyTitle: string;
-  emptySubTitle?:string
+  emptySubTitle?:string;
+  page?:string;
+  totalPages?:number ;
+  urlParamName?:string;
 };
-const EventCollection = ({ data, type, emptyTitle,emptySubTitle }: EventCollectionParams) => {
+const EventCollection = ({ data, type, emptyTitle,emptySubTitle,page,totalPages=0 ,urlParamName}: EventCollectionParams) => {
   return (
     <>
       {data.length > 0 ? (
@@ -31,6 +35,12 @@ const EventCollection = ({ data, type, emptyTitle,emptySubTitle }: EventCollecti
           <p className="text-base">{emptySubTitle}</p>
         </div>
       )}
+
+      {totalPages>1 && 
+        <div className="w-full">
+          <Pagination page={page} totalPages={totalPages} urlParamName={urlParamName}/>
+        </div>
+      }
     </>
   );
 };

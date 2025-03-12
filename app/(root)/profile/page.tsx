@@ -7,26 +7,28 @@ import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
 import React from "react";
 
-const page = async () => {
+const page = async ({searchParams}:any) => {
+  const OrderPage=searchParams?.OrderPage as string || "1";
+  const EventPage=searchParams?.EventPage as string || "1";
   const { sessionClaims } = await auth();
   const userId = sessionClaims?.userId as string;
   console.log(userId);
   const OrganizedEvents = await fetchEventsOfOrganizer({
     userId,
-    limit: 4,
-    page: 1,
+    limit: 3,
+    page: EventPage,
   });
-  // console.log(OrganizedEvents?.data)
+  // console.log('oye',OrganizedEvents?.totalPages)
   const EventsTickets = await fetchBoughtEvents({
     userId,
-    limit: 4,
-    page: 1,
+    limit:3,
+    page: OrderPage,
   });
-  console.log(EventsTickets?.data);
+  console.log(EventsTickets?.totalPages);
   const EventData= EventsTickets?.data.map((item:any)=>(
        item.eventId
   ))
-  console.log(EventData)
+  // console.log(EventData)
   return (
     <>
       <section className="w-full">
@@ -47,6 +49,9 @@ const page = async () => {
             type="Ticket_Events"
             emptyTitle="No event tickets purchased yet"
             emptySubTitle="No worries - plenty of exciting events to explore!"
+            page={OrderPage}
+            totalPages={EventsTickets?.totalPages}
+            urlParamName="OrderPage"
           />
         </div>
       </section>
@@ -70,6 +75,9 @@ const page = async () => {
             type="Organized_Events"
             emptyTitle="No events have been created yet"
             emptySubTitle="Go create some now"
+            page={EventPage}
+            totalPages={OrganizedEvents?.totalPages}
+            urlParamName="EventPage"
           />
         </div>
       </section>

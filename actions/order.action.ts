@@ -60,7 +60,7 @@ export async function createWebhookOrder({RazorpaymentId,eventId,BuyerId,totalAm
   }
 }
 
-export async function fetchBoughtEvents({ userId,limit=4, page=1,}:GetOrdersByUserParams) {
+export async function fetchBoughtEvents({ userId,limit=3, page=1,}:GetOrdersByUserParams) {
   try {
     await connectToDatabase();
     const skipEventDocument = (Number(page) - 1) * limit;
@@ -69,7 +69,7 @@ export async function fetchBoughtEvents({ userId,limit=4, page=1,}:GetOrdersByUs
     .populate({path:"eventId" ,model:"EventModel",populate:[{path: "organizer", select: "_id firstName lastName"},{ path: "category", select: "_id categoryName"}]})
     .limit(limit)
 
-    const TotalEventDocuments = await EventModel.countDocuments({BuyerId:userId});
+    const TotalEventDocuments = await orderModel.countDocuments({BuyerId:userId});
     return {
       data: JSON.parse(JSON.stringify(createOrder)),
       totalPages: Math.ceil(TotalEventDocuments / limit),
@@ -80,7 +80,7 @@ export async function fetchBoughtEvents({ userId,limit=4, page=1,}:GetOrdersByUs
   }
 }
 
-export async function findOrdersByEvent(id:string) {
+export async function findOrdersByEvent(id:string,searchText:string) {
   try {
     await connectToDatabase();
     const getOrdersDetails=await orderModel.find({eventId:id})

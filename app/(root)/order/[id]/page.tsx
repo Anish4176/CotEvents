@@ -1,4 +1,5 @@
 import { findOrdersByEvent } from '@/actions/order.action'
+import Search from '@/components/shared/Search'
 import { formatDateTime, formatPrice } from '@/lib/utils'
 import { IOrderItem } from '@/types'
 import { useSearchParams } from 'next/navigation'
@@ -6,11 +7,13 @@ import React from 'react'
 type paramsProps={
   params:{
     id:string
-  }
+  },
+  searchParams:any
 }
-const page = async({params}:paramsProps) => {
+const page = async({params,searchParams}:paramsProps) => {
    const {id}=params;
-   const orders= await findOrdersByEvent(id);
+   const searchText = (searchParams?.query as string) || ''
+   const orders= await findOrdersByEvent(id,searchText);
    console.log(orders)
   //  {
   //   _id: '67c5514724bcd7c19f3523e6',
@@ -26,15 +29,15 @@ const page = async({params}:paramsProps) => {
   // }
   return (
     <>
-    <div className='min-h-screen'>
+    <div className='min-h-screen bg-grey-50 w-full'>
 
    
     <div className="h-24 md:h-44 bg-gray-50 flex justify-center items-center">
         <h1 className="heading mx-auto">Order Details</h1>
       </div>
 
-    <section className="wrapper mt-8 ">
-      {/* <Search placeholder="Search buyer name..." /> */}
+    <section className="wrapper my-8 ">
+      <Search placeholder="Search buyer name..." />
     </section>
 
     <section className="wrapper overflow-x-auto">

@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Input } from "../ui/input";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-const Search = () => {
+const Search = ({placeholder}:{placeholder:string}) => {
   const [searchQuery, setsearchQuery] = useState("");
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -37,6 +37,7 @@ const Search = () => {
       <Input
         className="bg-gray-50 rounded-full h-[54px] focus-visible:ring-offset-0 border-none focus-visible:ring-transparent outline-none shadow-none"
         value={searchQuery}
+        placeholder={placeholder}
         onChange={(e) => setsearchQuery(e.target.value)}
       />
     </div>

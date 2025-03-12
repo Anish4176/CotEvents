@@ -60,13 +60,13 @@ export type CreateUserParams = {
     query: string
     category: string
     limit: number
-    page: number
+    page: string
   }
   
   export type GetEventsByUserParams = {
     userId: string
     limit?: number
-    page: number
+    page: string
   }
   
   export type GetRelatedEventsByCategoryParams = {

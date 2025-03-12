@@ -151,7 +151,7 @@ export const getRelatedEvents = async (categoryId:string,eventId:string) => {
 
 export const fetchEventsOfOrganizer = async ({
   userId,
-  limit=4,
+  limit=3,
   page
 }: GetEventsByUserParams) => {
   try {
