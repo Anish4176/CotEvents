@@ -98,7 +98,7 @@ const Checkout = ({ event }: { event: IEvent }) => {
               className="bg-purple-600 rounded-full text-base font-medium"
               onClick={handleCheckout}
             >
-              {isFree ? "Get Ticket " : "Buy Now"}
+              {isFree ? "Get Ticket " : "Buy Ticket"}
             </Button>
           </SignedIn>
           <SignedOut>
