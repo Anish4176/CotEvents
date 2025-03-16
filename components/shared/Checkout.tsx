@@ -1,5 +1,5 @@
 "use client";
-import { CreateOrder, verifyRazorpaySignature } from "@/actions/order.action";
+import { CreateOrder, createWebhookOrder, verifyRazorpaySignature } from "@/actions/order.action";
 import { IEvent } from "@/database/models/eventModel";
 import React from "react";
 import { Button } from "../ui/button";
@@ -7,7 +7,7 @@ import Razorpay from "razorpay";
 import Script from "next/script";
 import { SignedIn, SignedOut, useUser } from "@clerk/nextjs";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 
 const Checkout = ({ event }: { event: IEvent }) => {
   const { user } = useUser();
@@ -27,8 +27,20 @@ const Checkout = ({ event }: { event: IEvent }) => {
     organizer,
   } = event;
   const hasFinishedEvent = new Date(endDateTime) < new Date();
-
+  const router = useRouter();
   const handleCheckout = async () => {
+
+    const amount = event.isFree || Number(event.price)===0;
+    if(amount){
+      await createWebhookOrder({
+        RazorpaymentId: "Free",
+        eventId: _id,
+        BuyerId: currentUserId,
+        totalAmount: 0,
+      });
+      router.push(`${process.env.NEXT_PUBLIC_SERVER_URL}/profile`);
+      return;
+    }
     const createOrder = await CreateOrder(event);
     const order = {
       key: process.env.RAZORPAY_KEY_ID, // Enter the Key ID generated from the Dashboard
@@ -52,10 +64,6 @@ const Checkout = ({ event }: { event: IEvent }) => {
           console.log(e);
         }
       },
-      // prefill: {
-      //   name: "Gaurav Kumar", //your customer's name
-      //   email: "gaurav.kumar@example.com",
-      // },
       notes: {
         eventId: _id,
         eventTitle: title,

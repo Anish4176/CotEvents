@@ -23,8 +23,8 @@ const page = async ({ params }: any) => {
     category,
     organizer,
   } = EventDetails;
-  const relatedEvents = await getRelatedEvents(category._id, _id); //TODO: we have to also add the pagination
-
+  const relatedEvents = await getRelatedEvents(category._id, _id); 
+  
   return (
     <section className="w-full">
       <div className="bg-gray-50 w-full">

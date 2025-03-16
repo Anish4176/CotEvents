@@ -81,11 +81,12 @@ const EventForm = ({eventDetails, userId, type }: EventFormProps) => {
       url: "",
     },
   });
+  
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try{
-      console.log('try',values)
+      
       if(type=='Create'){
         const response = await createEvent({
           event:values,
@@ -303,6 +304,7 @@ const EventForm = ({eventDetails, userId, type }: EventFormProps) => {
                     />
                     <Input
                       placeholder="Price"
+                      type="number"
                       {...field}
                       className="rounded-full h-[54px] focus-visible:ring-offset-0 border-none focus-visible:ring-transparent outline-none shadow-none"
                     />
@@ -355,7 +357,9 @@ const EventForm = ({eventDetails, userId, type }: EventFormProps) => {
             />
           
         </div>
-        <Button type="submit" className="w-full rounded-full py-5">Submit</Button>
+        <Button type="submit" className="w-full rounded-full py-5">{form.formState.isSubmitting ? (
+            'Submitting...'
+          ): `${type} Event `}</Button>
       </form>
     </Form>
   );

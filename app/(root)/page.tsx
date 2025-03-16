@@ -5,17 +5,19 @@ import Pagination from "@/components/shared/Pagination";
 import Search from "@/components/shared/Search";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import Link from "next/link";
 
-const Home = async({searchParams}:any) => {
-  const query= searchParams?.query as string || "";
-  const category=searchParams?.category as string || "";
-  const page=searchParams?.page as string || "1";
-  const allEvents=await getAllEvents({
-    limit:6,
+const Home = async ({ searchParams }: any) => {
+  const query = (searchParams?.query as string) || "";
+  const category = (searchParams?.category as string) || "";
+  const page = (searchParams?.page as string) || "1";
+  const allEvents = await getAllEvents({
+    limit: 6,
     category,
     query,
-    page
+    page,
   });
+  console.log(allEvents);
   return (
     <main className="flex flex-col space-y-7 md:space-y-10  justify-center items-center w-full">
       <section className="bg-gray-50 w-[100%] py-10 md:py-20">
@@ -25,9 +27,14 @@ const Home = async({searchParams}:any) => {
               Discover Our Campus Events, All in One Place!
             </h1>
             <p className="text-base md:text-xl font-medium ">
-            Browse, create, and get tickets for every event happening in campus—everything you need is here.
+              Browse, create, and get tickets for every event happening in
+              campus—everything you need is here.
             </p>
-            <Button size="lg" className="rounded-full ">Explore Events</Button>
+              <Button size="lg" className="rounded-full ">
+            <Link href="#events">
+                Explore Events
+            </Link>
+              </Button>
           </div>
           <div className="md:w-[45%]">
             <Image
@@ -40,26 +47,26 @@ const Home = async({searchParams}:any) => {
         </div>
       </section>
       <section id="events" className="w-[100%] py-5 md:py-10">
-      <div className="wrapper flex flex-col justify-center items-start gap-5">
-        <h1 className="text-[24px] lg:text-[33px] lg:leading-[2.4rem] tracking-wide font-bold text-start">
-          Trusted by <br /> Thousands of events
-        </h1>
-        <div className="flex flex-col md:flex-row justify-between items-center w-full gap-5">
-          <Search placeholder="Search for a title..." />
-          <Category/>
+        <div className="wrapper flex flex-col justify-center items-start gap-5">
+          <h1 className="text-[24px] lg:text-[33px] lg:leading-[2.4rem] tracking-wide font-bold text-start">
+            Trusted by <br /> Thousands of events
+          </h1>
+          <div className="flex flex-col md:flex-row justify-between items-center w-full gap-5">
+            <Search placeholder="Search for a title..." />
+            <Category />
+          </div>
+          <div className="wrapper w-full flex flex-col justify-center items-start gap-5 my-10">
+            <EventCollection
+              data={allEvents?.data}
+              type="All_Events"
+              emptyTitle="No Events Found"
+              emptySubTitle="Come back later"
+              page={page}
+              totalPages={allEvents?.totalPages}
+            />
+          </div>
         </div>
-        <div className="wrapper w-full flex flex-col justify-center items-start gap-5 my-10">
-          <EventCollection
-           data={allEvents?.data}
-           type="All_Events"
-           emptyTitle="No Events Found"
-           emptySubTitle="Come back later"
-           page={page}
-           totalPages={allEvents?.totalPages}
-          />
-        </div>
-      </div>
-    </section>
+      </section>
     </main>
   );
 };

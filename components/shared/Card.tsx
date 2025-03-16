@@ -15,7 +15,7 @@ type CardProps = {
 const Card = async ({ item, type,hasOrderLink }: CardProps) => {
   const { sessionClaims } = await auth();
   const userId = sessionClaims?.userId as string;
-  const isEventOrganizer = userId === (item.organizer._id as string);
+  const isEventOrganizer = userId === (item.organizer?._id as string);
   return (
     <div className="flex relative flex-col gap-5 rounded-lg shadow-md pb-3">
       <div>
