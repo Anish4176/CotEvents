@@ -1,6 +1,7 @@
 import React from "react";
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetDescription,
   SheetHeader,
@@ -17,7 +18,7 @@ export const MobileMenu = () => {
   return (
     <div className="md:hidden">
       <Sheet>
-        <SheetTrigger>
+        <SheetTrigger asChild>
           <Image
             src={"/hamburger.png"}
             alt="Hamburger"
@@ -34,6 +35,8 @@ export const MobileMenu = () => {
               {NavbarMenu.map((item) => {
                 return (
                   <Link href={item.link} key={item.title}>
+                     <SheetClose asChild> 
+
                     <li
                       className={`${
                         pathname == item.link ? "text-black" : "text-gray-500"
@@ -41,6 +44,7 @@ export const MobileMenu = () => {
                     >
                       {item.title}
                     </li>
+                    </SheetClose>
                   </Link>
                 );
               })}
