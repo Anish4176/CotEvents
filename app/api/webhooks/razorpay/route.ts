@@ -16,7 +16,7 @@ export async function POST(req:Request){
          throw new Error("Razorpay Signature is not valid");
       }
 
-      //save the data in our order database;
+      //save the data in our order database
       const {payload} = webhookBody;
       const {id:RazorpaymentId,amount,notes}=payload.payment.entity;
       const {eventId,BuyerId}=notes;

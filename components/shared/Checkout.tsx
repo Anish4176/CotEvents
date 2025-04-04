@@ -43,14 +43,13 @@ const Checkout = ({ event }: { event: IEvent }) => {
     }
     const createOrder = await CreateOrder(event);
     const order = {
-      key: process.env.RAZORPAY_KEY_ID, // Enter the Key ID generated from the Dashboard
+      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID, // Enter the Key ID generated from the Dashboard
       amount: createOrder.amount,
       currency: "INR",
       name: "CotEvents",
       order_id: createOrder.id,
       handler: async (response: any) => {
         try {
-          console.log(response);
           const razorpay_payment_id = response.razorpay_payment_id;
           const razorpay_signature = response.razorpay_signature;
           const orderId = createOrder.id;
